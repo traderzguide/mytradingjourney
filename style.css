@@ -3,6 +3,7 @@ body {
   line-height: 1.6;
   margin: 0;
   padding: 0;
+  text-align:center;
   background-color: #f4f4f9;
   color: #333;
 }
@@ -31,7 +32,12 @@ body {
     padding: 15px;
 }
 }
-
+button:disabled {
+  background-color: #b0b0b0 !important; /* Light gray background */
+  color: #666 !important; /* Darker gray text */
+  cursor: not-allowed !important; /* Show not-allowed cursor */
+  opacity: 0.5 !important; /* Reduce opacity */
+}
 h1 {
   text-align: center;
   color: #2c3e50;
@@ -491,12 +497,15 @@ html {
 }
 .checkbox {
   cursor: pointer;
+  justify-content: center;
+  margin-bottom: 10px;
   display: flex;
   align-items: center;
 }
 
 .checkbox__input {
-  position: absolute;
+  position:absolute;
+ 
   width: 1.375em;
   height: 1.375em;
   opacity: 0;
@@ -513,7 +522,13 @@ html {
   flex-shrink: 0;
   overflow: visible;
 }
-
+.dropdown-item[href="#"] {
+  color: #e74c3c;
+  font-weight: bold;
+}
+.dropdown-item[href="#"]:hover {
+  background-color: #ffe6e6;
+}
 .tick {
   stroke-dasharray: 20px;
   stroke-dashoffset: 20px;
