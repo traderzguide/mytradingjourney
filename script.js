@@ -97,55 +97,19 @@ document.addEventListener('DOMContentLoaded', function() {
 document.addEventListener("DOMContentLoaded", function () {
   const checkboxes = document.querySelectorAll(".access-checkbox");
   const buttons = document.querySelectorAll(".watch-now-btn");
-  const dropdowns = document.querySelectorAll(".toggle-dropdown-btn");
-
-  function updateAccess() {
-    checkboxes.forEach((checkbox, i) => {
-      if (i > 0 && !checkboxes[i - 1].checked) {
-        checkbox.disabled = true;
-      } else {
-        checkbox.disabled = false;
-      }
-    });
-
-    buttons.forEach((btn, i) => {
-      if (i > 0 && !checkboxes[i - 1].checked) {
-        btn.disabled = true;
-        btn.style.opacity = "0.5";
-      } else {
-        btn.disabled = false;
-        btn.style.opacity = "1";
-      }
-    });
-
-    dropdowns.forEach((dropdown, i) => {
-      if (i > 0 && !checkboxes[i - 1].checked) {
-        dropdown.disabled = true;
-        dropdown.style.opacity = "0.5";
-      } else {
-        dropdown.disabled = false;
-        dropdown.style.opacity = "1";
-      }
-    });
-  }
 
   checkboxes.forEach((checkbox, index) => {
-    const savedState = localStorage.getItem(`checkbox-${index}`);
-    if (savedState === "checked") {
-      checkbox.checked = true;
-    }
-
     checkbox.addEventListener("change", function () {
       if (this.checked) {
         localStorage.setItem(`checkbox-${index}`, "checked");
-        updateAccess();
+        location.reload();
       } else {
         if (checkboxes[index + 1] && checkboxes[index + 1].checked) {
           this.checked = true;
           showPopup("You cannot uncheck this after progressing!");
         } else {
           localStorage.setItem(`checkbox-${index}`, "unchecked");
-          updateAccess();
+          location.reload();
         }
       }
     });
@@ -161,8 +125,6 @@ document.addEventListener("DOMContentLoaded", function () {
       popup.remove();
     }, 3000);
   }
-
-  updateAccess();
 });
 
 
