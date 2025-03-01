@@ -98,23 +98,91 @@ document.addEventListener("DOMContentLoaded", function () {
   const checkboxes = document.querySelectorAll(".access-checkbox");
   const buttons = document.querySelectorAll(".watch-now-btn");
 
+  // 1. Disable all except the first checkbox/button on initial load if there's no saved state.
+  checkboxes.forEach((checkbox, index) => {
+    // Read saved state from localStorage
+    const savedState = localStorage.getItem(`checkbox-${index}`);
+
+    // If no saved state, disable all except index 0
+    if (savedState === null) {
+      checkbox.disabled = (index !== 0);
+      checkbox.checked = false;
+      localStorage.setItem(`checkbox-${index}`, "unchecked");
+    } else {
+      // If we do have a saved state, apply it (checked/unchecked).
+      checkbox.checked = (savedState === "checked");
+    }
+  });
+
+  // Same for buttons
+  buttons.forEach((btn, index) => {
+    btn.disabled = (index !== 0);
+    btn.style.opacity = btn.disabled ? "0.5" : "1";
+  });
+
+  // 2. Run updateAccess() once to enable any subsequent boxes
+  //    if the previous ones are checked from a prior session.
+  updateAccess();
+
+  // 3. Listen for checkbox changes
   checkboxes.forEach((checkbox, index) => {
     checkbox.addEventListener("change", function () {
       if (this.checked) {
+        // If user checks this box, store state, then refresh
         localStorage.setItem(`checkbox-${index}`, "checked");
+        // Refresh the page to re-run updateAccess logic on load
         location.reload();
       } else {
+        // If user tries to uncheck, see if the next box is already checked
         if (checkboxes[index + 1] && checkboxes[index + 1].checked) {
+          // Block them from unchecking
           this.checked = true;
           showPopup("You cannot uncheck this after progressing!");
         } else {
           localStorage.setItem(`checkbox-${index}`, "unchecked");
+          // Refresh the page after unchecking
           location.reload();
         }
       }
     });
   });
 
+  // 4. Prevent clicks on locked buttons
+  buttons.forEach((button, index) => {
+    button.addEventListener("click", function (event) {
+      // If there's a "previous" checkbox that isn’t checked, block click
+      if (index > 0 && !checkboxes[index - 1].checked) {
+        event.preventDefault();
+        showPopup("You need to complete the previous section first!");
+      }
+    });
+  });
+
+  // This function re-checks which items to disable/enable
+  function updateAccess() {
+    checkboxes.forEach((checkbox, i) => {
+      // If the previous box isn't checked, disable this one
+      if (i > 0 && !checkboxes[i - 1].checked) {
+        checkbox.disabled = true;
+        checkbox.checked = false;
+        localStorage.setItem(`checkbox-${i}`, "unchecked");
+      } else {
+        checkbox.disabled = false;
+      }
+    });
+
+    buttons.forEach((btn, i) => {
+      if (i > 0 && !checkboxes[i - 1].checked) {
+        btn.disabled = true;
+        btn.style.opacity = "0.5";
+      } else {
+        btn.disabled = false;
+        btn.style.opacity = "1";
+      }
+    });
+  }
+
+  // Simple popup
   function showPopup(message) {
     let popup = document.createElement("div");
     popup.className = "popup-message";
@@ -126,7 +194,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }, 3000);
   }
 });
-
 
 document.addEventListener("DOMContentLoaded", function () {
   const restartButton = document.querySelector(".dropdown-item[href='#']");
