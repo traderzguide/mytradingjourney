@@ -103,7 +103,6 @@ document.addEventListener("DOMContentLoaded", function () {
     checkboxes.forEach((checkbox, i) => {
       if (i > 0 && !checkboxes[i - 1].checked) {
         checkbox.disabled = true;
-        localStorage.setItem(`checkbox-${i}`, "unchecked");
       } else {
         checkbox.disabled = false;
       }
@@ -131,17 +130,22 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   checkboxes.forEach((checkbox, index) => {
+    const savedState = localStorage.getItem(`checkbox-${index}`);
+    if (savedState === "checked") {
+      checkbox.checked = true;
+    }
+
     checkbox.addEventListener("change", function () {
       if (this.checked) {
         localStorage.setItem(`checkbox-${index}`, "checked");
-        location.reload();
+        updateAccess();
       } else {
         if (checkboxes[index + 1] && checkboxes[index + 1].checked) {
           this.checked = true;
           showPopup("You cannot uncheck this after progressing!");
         } else {
           localStorage.setItem(`checkbox-${index}`, "unchecked");
-          location.reload();
+          updateAccess();
         }
       }
     });
