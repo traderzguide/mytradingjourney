@@ -7,7 +7,14 @@ body {
   background-color: #f4f4f9;
   color: #333;
 }
-
+.main__container { max-width: 500px; width: 100%; }
+.form__container { width: 100%; margin: 50px auto; box-shadow: 0 3px 10px rgba(0,0,0,0.2); padding: 50px 30px; border-radius: 20px; background: white; text-align: center; }
+h2 { font-size: 32px; text-align: center; margin-bottom: 20px; color: #0054ff; }
+.form__input { text-align: center; margin-bottom: 20px; position: relative; }
+.form__input input { width: 100%; padding: 10px 15px; height: 45px; border: 1px solid #ccc; border-radius: 5px; font-size: 15px; }
+.form__input input[type="submit"] { background-color: #0054ff; color: white; cursor: pointer; }
+.form__input input[type="submit"]:hover { background-color: #0f46b7; transition: 0.3s; }
+#errorMessage { color: red; display: none; }
 .container {
   max-width: 2400px; 
   
@@ -515,6 +522,12 @@ html {
 .checkbox__input:checked + .checkbox__icon .tick {
   stroke-dashoffset: 0;
 }
+/* Ensure dropdown items change background on hover */
+.dropdown-menu .dropdown-item:hover {
+  background-color: gray;
+  color: darkgray !important;
+  transition: background-color 0.3s ease;
+}
 
 .checkbox__icon {
   width: 1.375em;
@@ -526,8 +539,12 @@ html {
   color: #e74c3c;
   font-weight: bold;
 }
+.dropdown-item:hover {
+color: white;
+}
 .dropdown-item[href="#"]:hover {
-  background-color: #ffe6e6;
+  background-color: #e74c3c !important;
+  font-weight: bold;
 }
 .tick {
   stroke-dasharray: 20px;
